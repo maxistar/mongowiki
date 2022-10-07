@@ -21,7 +21,7 @@ type Page struct {
 	Body  string
 }
 
-var templates = template.Must(template.ParseFiles("edit.html", "view.html"))
+var templates = template.Must(template.ParseFiles("./templates/edit.html", "./templates/view.html"))
 var validPath = regexp.MustCompile("^/(edit|save|view)/([a-zA-Z0-9]+)$")
 
 func (p *Page) save(coll *mongo.Collection) {
@@ -39,11 +39,7 @@ func loadPage(title string, coll *mongo.Collection) *Page {
 		return nil
 	}
 	fmt.Printf("found document %v", result)
-	return &Page{Title: result["title"].(string), Body: result["title"].(string)}
-}
-
-func handler(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintf(w, "Hi there, I love %s!", r.URL.Path[1:])
+	return &Page{Title: result["title"].(string), Body: result["content"].(string)}
 }
 
 func renderTemplate(w http.ResponseWriter, tmpl string, p *Page) {
@@ -123,14 +119,11 @@ func main() {
 
 	coll := client.Database("myDB").Collection("mongowiki")
 
+	fs := http.FileServer(http.Dir("./static"))
+	http.Handle("/static/", http.StripPrefix("/static/", fs))
+
 	http.HandleFunc("/view/", makeHandler(viewHandler, coll))
 	http.HandleFunc("/edit/", makeHandler(editHandler, coll))
 	http.HandleFunc("/save/", makeHandler(saveHandler, coll))
-	log.Fatal(http.ListenAndServe(":8080", nil))
-
-	//p1 := &Page{Title: "TestPage", Body: "This is a sample Page.."}
-	//p1.saveMongo(coll)
-
-	//p2 := loadPage("TestPage", coll)
-	//fmt.Printf("Loaded page: %v\n", p2.Title)
+	log.Fatal(http.ListenAndServe(":8085", nil))
 }
