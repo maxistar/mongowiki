@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net/http"
+	"os"
 	"regexp"
 	"text/template"
 	"time"
@@ -28,7 +29,10 @@ func (p *Page) save(coll *mongo.Collection) {
 	opts := options.Update().SetUpsert(true)
 	doc := bson.D{{"title", p.Title}, {"content", p.Body}}
 	update := bson.D{{"$set", doc}}
-	coll.UpdateOne(context.TODO(), bson.D{{"title", p.Title}}, update, opts) // todo error tracking
+	_, err := coll.UpdateOne(context.TODO(), bson.D{{"title", p.Title}}, update, opts)
+	if err != nil {
+		return
+	}
 }
 
 func loadPage(title string, coll *mongo.Collection) *Page {
@@ -100,7 +104,7 @@ func saveHandler(w http.ResponseWriter, r *http.Request, title string, coll *mon
 func main() {
 	fmt.Println("Works!")
 
-	client, err := mongo.NewClient(options.Client().ApplyURI("mongodb+srv://maxitemis:JBU6JkJRNYN73bb@cluster0.x5da5.mongodb.net/?retryWrites=true&w=majority"))
+	client, err := mongo.NewClient(options.Client().ApplyURI(os.Getenv("MONGO_CONNECTION_STRING")))
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -117,7 +121,7 @@ func main() {
 
 	defer client.Disconnect(ctx)
 
-	coll := client.Database("myDB").Collection("mongowiki")
+	coll := client.Database(os.Getenv("MONGO_DB_NAME")).Collection(os.Getenv("MONGO_COLLECTION_NAME"))
 
 	fs := http.FileServer(http.Dir("./static"))
 	http.Handle("/static/", http.StripPrefix("/static/", fs))

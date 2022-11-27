@@ -1,4 +1,4 @@
-module monogowiki
+module mongowiki
 
 go 1.18
 

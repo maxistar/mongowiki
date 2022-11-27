@@ -1,13 +1,16 @@
+# Mongo WIKI
 
+## Access Database Access
+https://cloud.mongodb.com/
 
+## Compile
+go build
 http://localhost:8085/view/test
 
-
-docker build -t app-prod . --target production
-
-docker run -p 8085:8085 --name app-prod app-prod
+## Build Dockek Image
 
 docker build -t maxistar/app-mongowiki . --target production
+docker run -p 8085:8085 maxistar/app-mongowiki
 docker push  maxistar/app-mongowiki
 
 
