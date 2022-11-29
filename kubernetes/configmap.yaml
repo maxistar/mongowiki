@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: mongo-wiki-configmap
+data:
+  MONGO_DB_NAME: "myDB"
+  MONGO_COLLECTION_NAME: "mongowiki"

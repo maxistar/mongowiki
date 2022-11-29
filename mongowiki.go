@@ -102,7 +102,7 @@ func saveHandler(w http.ResponseWriter, r *http.Request, title string, coll *mon
 }
 
 func main() {
-	fmt.Println("Works!")
+	fmt.Println("Mongo WIKI is started on post 8085")
 
 	client, err := mongo.NewClient(options.Client().ApplyURI(os.Getenv("MONGO_CONNECTION_STRING")))
 	if err != nil {

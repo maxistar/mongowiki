@@ -1,0 +1,29 @@
+# https://kubernetes.io/docs/tasks/inject-data-application/define-environment-variable-container/
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mongo-wiki-demo
+  labels:
+    app: mongo-wiki-demo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mongo-wiki-demo
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 3
+  template:
+    metadata:
+      labels:
+        app: mongo-wiki-demo
+    spec:
+      containers:
+        - name: mongo-wiki-demo
+          image: maxistar/app-mongowiki:latest
+          envFrom:
+            - configMapRef:
+                name: mongo-wiki-configmap
+            - secretRef:
+                name: mongo-wiki-secret
