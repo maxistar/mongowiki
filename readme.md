@@ -12,8 +12,18 @@ GoLang + Minikube Playground
 ````shell
 export MONGO_DB_NAME=myDB
 export MONGO_COLLECTION_NAME=mongowiki
-export MONGO_CONNECTION_STRING="mongodb+srv://maxitemis:JBU6JkJRNYN73bb@cluster0.x5da5.mongodb.net/?retryWrites=true&w=majority"
+export MONGO_CONNECTION_STRING="mongodb+srv://username:password@cluster0.x5da5.mongodb.net/?retryWrites=true&w=majority"
 ````
+
+In Windows
+
+```shell
+[Environment]::SetEnvironmentVariable('MONGO_DB_NAME', 'myFirstDatabase')
+[Environment]::SetEnvironmentVariable('MONGO_COLLECTION_NAME', 'mongowiki')
+[Environment]::SetEnvironmentVariable('MONGO_CONNECTION_STRING', 'mongodb+srv://username:password@cluster0.wpell50.mongodb.net/?retryWrites=true&w=majority')
+
+```
+
 
 ## Run Locally
 
